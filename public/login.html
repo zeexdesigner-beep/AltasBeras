@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Entrar — Altas Beras</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+<main class="login">
+  <div class="login-brand">
+    <img src="logo.png" alt="Logo Distribuidora Altas Beras">
+    <span>Gestão de distribuidora</span>
+  </div>
+
+  <form class="login-card" id="formLogin" autocomplete="on" novalidate>
+    <h1>Entrar</h1>
+    <p class="lead">Acesso restrito aos responsáveis pela distribuidora.</p>
+
+    <label class="field">Usuário
+      <input type="text" id="usuario" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
+    </label>
+
+    <label class="field">Senha
+      <span class="pass">
+        <input type="password" id="senha" name="password" autocomplete="current-password" required>
+        <button type="button" class="link" id="verSenha" aria-pressed="false" aria-label="Mostrar senha">Mostrar</button>
+      </span>
+    </label>
+
+    <p class="msg err" id="erro" role="alert" hidden></p>
+
+    <button class="btn" type="submit" id="entrar">Entrar</button>
+  </form>
+
+  <p class="note login-note">Não há cadastro público. Peça ao administrador para criar ou redefinir seu acesso.</p>
+</main>
+
+<script src="login.js"></script>
+</body>
+</html>

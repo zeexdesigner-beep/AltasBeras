@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Altas Beras — Gestão da distribuidora</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<input class="tab" type="radio" name="tab" id="t1" checked aria-label="Painel">
+<input class="tab" type="radio" name="tab" id="t2" aria-label="Produtos">
+<input class="tab" type="radio" name="tab" id="t3" aria-label="Nova venda">
+<input class="tab" type="radio" name="tab" id="t4" aria-label="Histórico">
+
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <img src="logo.png" alt="Logo Distribuidora Altas Beras">
+      <span>Gestão de distribuidora</span>
+    </div>
+    <nav class="nav">
+      <label for="t1"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Painel</label>
+      <label for="t2"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Produtos</label>
+      <label for="t3"><svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M2 3h3l2.5 12h11L21 7H6"/></svg>Nova venda</label>
+      <label for="t4"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>Histórico</label>
+    </nav>
+    <div class="who">
+      <b>Responsável</b>Distribuidora Altas Beras
+      <span class="who-user" id="usuarioAtual"></span>
+      <button type="button" class="btn ghost out" id="sair">Sair</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="mtop">
+      <img class="mlogo" src="logo.png" alt="Altas Beras">
+      <button type="button" class="btn ghost out" id="sairMobile">Sair</button>
+    </div>
+
+    <p class="msg err" id="erroGlobal" role="alert" hidden></p>
+
+    <!-- ========== PAINEL ========== -->
+    <section class="view" id="v1">
+      <h1>Painel</h1>
+      <p class="lead">Resumo da operação com base em produtos.csv e vendas.csv.</p>
+
+      <div class="hero">
+        <div class="ring" role="img" id="ring" aria-label="Produtos cadastrados">
+          <i class="base"></i><i class="fill"></i>
+          <div><strong><span id="pTotal">–</span><small>/<span id="pMax">100</span></small></strong><span>produtos cadastrados</span></div>
+        </div>
+        <dl class="stats">
+          <div><dt>Itens em estoque</dt><dd id="sItens">–</dd></div>
+          <div><dt>Vendas registradas</dt><dd id="sVendas">–</dd></div>
+          <div><dt>Faturamento total</dt><dd class="gold" id="sFat">–</dd></div>
+          <div><dt>Lucro estimado</dt><dd class="gold" id="sLucro">–</dd></div>
+        </dl>
+      </div>
+
+      <!-- Produtos Mais Vendidos: ranking calculado com o histórico real de vendas -->
+      <div class="rank" id="rankBloco">
+        <h2>Produtos Mais Vendidos</h2>
+        <ol id="rankLista" aria-label="Ranking dos produtos mais vendidos"></ol>
+        <p class="empty" id="rankVazio" hidden>Ainda não há vendas registradas. O ranking aparecerá aqui assim que houver dados.</p>
+      </div>
+
+      <div class="split">
+        <div>
+          <h2>Estoque baixo</h2>
+          <ul class="low" id="listaBaixo"></ul>
+        </div>
+        <div>
+          <h2>Últimas vendas</h2>
+          <ul class="last" id="listaUltimas"></ul>
+          <label for="t3" class="btn go-sale">Registrar venda</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PRODUTOS ========== -->
+    <section class="view" id="v2">
+      <h1>Produtos</h1>
+      <p class="lead" id="leadProdutos">Carregando…</p>
+
+      <div class="bar">
+        <label class="field search">Buscar produto<input type="search" id="filtroProdutos" placeholder="Código ou nome, ex.: 4 ou Brahma" autocomplete="off"></label>
+      </div>
+
+      <details class="newprod" id="detNovo">
+        <summary class="btn">Cadastrar produto</summary>
+        <form class="form" id="formNovo" novalidate>
+          <label class="field">Código<input type="number" min="1" step="1" name="codigo" id="novoCodigo" placeholder="21"></label>
+          <label class="field">Nome<input type="text" name="nome" maxlength="60" placeholder="Nome do produto" required aria-required="true"></label>
+          <label class="field">Fornecedor<input type="text" name="fornecedor" maxlength="60" placeholder="Nome do fornecedor" required aria-required="true"></label>
+          <label class="field">Estoque inicial<input type="number" min="1" step="1" name="estoque" placeholder="Ex.: 30" required aria-required="true"></label>
+          <div class="two">
+            <label class="field">Preço de compra<input type="text" inputmode="decimal" name="precoCompra" placeholder="Ex.: 4,50" required aria-required="true"></label>
+            <label class="field">Preço de venda<input type="text" inputmode="decimal" name="precoVenda" placeholder="Ex.: 7,90" required aria-required="true"></label>
+          </div>
+          <p class="note">Todos os campos são obrigatórios. Estoque e preços devem ser maiores que zero e o código não pode repetir. Deixe o código em branco para usar o próximo disponível.</p>
+          <p class="msg err" id="erroNovo" role="alert" hidden></p>
+          <button class="btn" type="submit">Cadastrar produto</button>
+        </form>
+      </details>
+
+      <div class="prod">
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Cód.</th><th>Produto</th><th class="n">Estoque</th><th class="n">Compra</th><th class="n">Venda</th><th>Fornecedor</th><th></th></tr></thead>
+            <tbody id="tbProdutos"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== NOVA VENDA ========== -->
+    <section class="view" id="v3">
+      <h1>Nova venda</h1>
+      <p class="lead">Busque pelo código ou pelo nome do produto e informe a quantidade.</p>
+
+      <div class="sale">
+        <div>
+          <label class="field" for="busca">Código ou nome do produto</label>
+          <div class="ac">
+            <input type="text" id="busca" placeholder="Ex.: 4, Brahma ou coca 2l" autocomplete="off" spellcheck="false"
+              role="combobox" aria-expanded="false" aria-controls="sugestoes" aria-autocomplete="list">
+            <ul class="sug" id="sugestoes" role="listbox" aria-label="Produtos encontrados" hidden></ul>
+          </div>
+          <p class="msg" id="buscaMsg" role="status" aria-live="polite" hidden></p>
+
+          <div class="found" id="found" hidden>
+            <h3 id="fNome"></h3>
+            <dl>
+              <div><dt>Código</dt><dd id="fCodigo"></dd></div>
+              <div><dt>Estoque atual</dt><dd id="fEstoque"></dd></div>
+              <div><dt>Preço de venda</dt><dd id="fPreco"></dd></div>
+            </dl>
+            <p class="note" id="fNoCarrinho" hidden></p>
+            <div class="qty">
+              <button type="button" id="qMenos" aria-label="Diminuir">−</button>
+              <input type="number" id="qtd" value="1" min="1" aria-label="Quantidade">
+              <button type="button" id="qMais" aria-label="Aumentar">+</button>
+              <button type="button" class="btn" id="addVenda">Adicionar à venda</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="resume">
+          <h2>Resumo</h2>
+          <ul class="items" id="resumoItens"></ul>
+          <p class="empty small" id="resumoVazio">Nenhum produto adicionado ainda.</p>
+          <div class="row total"><span>Total</span><b id="resumoTotal">R$ 0,00</b></div>
+          <button type="button" class="btn" id="confirmar" disabled>Confirmar venda</button>
+          <p class="msg" id="vendaMsg" role="status" aria-live="polite" hidden></p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========== HISTÓRICO ========== -->
+    <section class="view" id="v4">
+      <h1>Histórico de vendas</h1>
+      <p class="lead">Registros de vendas.csv.</p>
+
+      <div class="hist" id="hist">
+        <div class="head"><span>Cód.</span><span>Produto</span><span class="n">Quantidade</span><span class="n">Estoque restante</span><span class="n">Total</span></div>
+        <div id="histLinhas"></div>
+        <p class="empty pad" id="histVazio" hidden>Nenhuma venda registrada.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- edição de produto -->
+<dialog id="dlgEditar">
+  <form class="form" id="formEditar" method="dialog" novalidate>
+    <h2 class="dlg-title">Alterar produto <span id="edCodigoTxt"></span></h2>
+    <label class="field">Nome<input type="text" name="nome" maxlength="60" required aria-required="true"></label>
+    <label class="field">Fornecedor<input type="text" name="fornecedor" maxlength="60" required aria-required="true"></label>
+    <label class="field">Estoque<input type="number" min="0" step="1" name="estoque" required aria-required="true"></label>
+    <label class="field">Preço de compra<input type="text" inputmode="decimal" name="precoCompra" required aria-required="true"></label>
+    <label class="field">Preço de venda<input type="text" inputmode="decimal" name="precoVenda" required aria-required="true"></label>
+    <p class="msg err" id="erroEditar" role="alert" hidden></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="edCancelar">Cancelar</button>
+      <button type="submit" class="btn">Salvar alterações</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- confirmação genérica -->
+<dialog id="dlgConfirma">
+  <div class="form">
+    <h2 class="dlg-title" id="cfTitulo"></h2>
+    <p class="cf-text" id="cfTexto"></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="cfNao">Cancelar</button>
+      <button type="button" class="btn danger" id="cfSim">Remover</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

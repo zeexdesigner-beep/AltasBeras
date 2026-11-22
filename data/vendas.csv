@@ -1,0 +1,11 @@
+id;pedido;data;codigo;produto;quantidade;preco_unit;custo_unit;total;estoque_restante;status
+1;1;;12;Gatorade;1;7.00;6.00;7.00;189;concluida
+2;2;;13;Doritos;1;13.00;9.00;13.00;99;concluida
+3;3;2026-11-18T16:22:20.075Z;13;Doritos;3;13.00;9.00;39.00;96;concluida
+4;4;2026-11-18T16:22:37.846Z;12;Gatorade;6;6.00;5.00;36.00;48;concluida
+5;5;2026-11-18T16:22:48.540Z;10;Coca-Cola 2L;1;12.00;9.00;12.00;98;concluida
+6;6;2026-11-22T02:45:22.106Z;4;Brahma 350ml;10;5.00;4.00;50.00;57;concluida
+7;6;2026-11-22T02:45:22.106Z;10;Coca-Cola 2L;5;12.00;9.00;60.00;93;concluida
+8;7;2026-11-22T02:54:09.681Z;24;Vinho;5;15.00;10.00;75.00;5;concluida
+9;7;2026-11-22T02:54:09.681Z;10;Coca-Cola 2L;6;12.00;9.00;72.00;87;concluida
+10;8;2026-11-22T02:54:24.309Z;4;Brahma 350ml;5;5.00;4.00;25.00;52;concluida
